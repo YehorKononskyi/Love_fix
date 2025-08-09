@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>Mobile v12.2</title>
+  <meta name="theme-color" content="#101114">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <section id="intro" class="intro" aria-label="Вступление">
+    <div id="introStep1" class="itext" role="dialog" aria-live="polite">Я сделал для нас игру в карточки, на которые мы всегда засматривались</div>
+    <div id="introStep2" class="itext" role="dialog" aria-live="polite">Тут мы отвечаем друг другу на разные вопросы, сейчас расскажу правила</div>
+    <div id="introStep3" class="rules-card">
+      <h4>Правила</h4>
+      <ul class="rules" id="rulesList">
+        <li><span class="e">🎛️</span><span>Мы выбираем темы для вопросов</span></li>
+        <li><span class="e">❓</span><span>Каждый задаёт вопрос своему партнёру</span></li>
+        <li><span class="e">💬</span><span>Получает развёрнутый ответ и строит дискуссию</span></li>
+        <li><span class="e">👂</span><span>Мы слушаем и не осуждаем</span></li>
+        <li><span class="e">🤫</span><span>Не перебиваем</span></li>
+        <li><span class="e">❤️</span><span>Любим и принимаем друг друга</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <main id="app" class="shell" aria-hidden="true">
+    <section class="stage" id="stage">
+      <article id="card" class="card" role="button" aria-label="Следующая карточка (тапните)">
+        <div class="card-inner">
+          <div class="qnum" id="qnum"></div>
+          <div class="qtext" id="qtext">Выбери категории которые тебя интересуют и тапай чтобы начать :)</div>
+        </div>
+      </article>
+    </section>
+
+    <div class="progress">
+      <div class="pbar"><span id="pfill"></span></div>
+      <div class="pcap" id="pcap">0 из 0</div>
+    </div>
+
+    <footer class="bbar">
+      <button class="btn ghost" id="prevBtn" aria-label="Предыдущая" disabled>◀</button>
+      <button class="btn" id="deckBtn" aria-label="Колоды">Колоды</button>
+      <button class="btn primary" id="nextBtn" aria-label="Следующая">Далее</button>
+    </footer>
+
+  <script type="application/json" id="cfg">
+  {
+    "version": 12.2,
+    "defaultOrder": "sequential",
+    "categories": [
+      {"id":"cat1","name":"Тест 1","fill":"#DDF5D6","stroke":"#3E83A4","text":"#39434C"},
+      {"id":"cat2","name":"Тест 2","fill":"#D9EFF6","stroke":"#3E83A4","text":"#3E4A54"},
+      {"id":"cat3","name":"Тест 3","fill":"#F3F3C8","stroke":"#9F8F3E","text":"#5A5A44"}
+    ],
+    "cards":[
+      {"id":"c1_q1","cat":"cat1","text":"[Тест 1] Вопрос 1"},
+      {"id":"c1_q2","cat":"cat1","text":"[Тест 1] Вопрос 2"},
+      {"id":"c1_q3","cat":"cat1","text":"[Тест 1] Вопрос 3"},
+      {"id":"c1_q4","cat":"cat1","text":"[Тест 1] Вопрос 4"},
+      {"id":"c1_q5","cat":"cat1","text":"[Тест 1] Вопрос 5"},
+
+      {"id":"c2_q1","cat":"cat2","text":"[Тест 2] Вопрос 1"},
+      {"id":"c2_q2","cat":"cat2","text":"[Тест 2] Вопрос 2"},
+      {"id":"c2_q3","cat":"cat2","text":"[Тест 2] Вопрос 3"},
+      {"id":"c2_q4","cat":"cat2","text":"[Тест 2] Вопрос 4"},
+      {"id":"c2_q5","cat":"cat2","text":"[Тест 2] Вопрос 5"},
+
+      {"id":"c3_q1","cat":"cat3","text":"[Тест 3] Вопрос 1"},
+      {"id":"c3_q2","cat":"cat3","text":"[Тест 3] Вопрос 2"},
+      {"id":"c3_q3","cat":"cat3","text":"[Тест 3] Вопрос 3"},
+      {"id":"c3_q4","cat":"cat3","text":"[Тест 3] Вопрос 4"},
+      {"id":"c3_q5","cat":"cat3","text":"[Тест 3] Вопрос 5"}
+    ]
+  }
+  </script>
+  <script src="./app.js" type="module"></script>
+</body>
+</html>
