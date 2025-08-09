@@ -1,9 +1,0 @@
-{
-  "name": "Диалог-карточки",
-  "short_name": "Карточки",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#0e1014",
-  "theme_color": "#101114",
-  "icons": []
-}
