@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>Диалог‑карточки</title>
+  <meta name="theme-color" content="#101114">
+  <link rel="stylesheet" href="./styles.css?v=13.0">
+</head>
+<body>
+  <!-- Онбординг -->
+  <section id="intro" class="intro" aria-label="Вступление">
+    <div id="introStep1" class="itext" role="dialog" aria-live="polite">Я сделал для нас игру в карточки, на которые мы всегда засматривались</div>
+    <div id="introStep2" class="itext" role="dialog" aria-live="polite">Тут мы отвечаем друг другу на разные вопросы, сейчас расскажу правила</div>
+
+    <div id="introStep3" class="rules-card" role="dialog" aria-live="polite">
+      <h4>Правила</h4>
+      <ul class="rules" id="rulesList">
+        <li><span class="e">🎛️</span><span>Мы выбираем темы для вопросов</span></li>
+        <li><span class="e">❓</span><span>Каждый задаёт вопрос своему партнёру</span></li>
+        <li><span class="e">💬</span><span>Получает развёрнутый ответ и строит дискуссию</span></li>
+        <li><span class="e">👂</span><span>Мы слушаем и не осуждаем</span></li>
+        <li><span class="e">🤫</span><span>Не перебиваем</span></li>
+        <li><span class="e">❤️</span><span>Любим и принимаем друг друга</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Приложение -->
+  <main id="app" class="shell" aria-hidden="true">
+    <section class="stage" id="stage">
+      <article id="card" class="card" role="button" aria-label="Следующая карточка (тапните)">
+        <div class="card-inner">
+          <div class="qnum" id="qnum"></div>
+          <div class="qtext" id="qtext">Выбери категории которые тебя интересуют и тапай чтобы начать :)</div>
+        </div>
+      </article>
+    </section>
+
+    <div class="progress">
+      <div class="pbar"><span id="pfill"></span></div>
+      <div class="pcap" id="pcap">0 из 0</div>
+    </div>
+
+    <footer class="bbar">
+      <button class="btn ghost" id="prevBtn" aria-label="Предыдущая" disabled>◀</button>
+      <button class="btn" id="deckBtn" aria-label="Колоды">Колоды</button>
+      <button class="btn primary" id="nextBtn" aria-label="Следующая">Далее</button>
+    </footer>
+
+    <!-- Диалог выбора колод -->
+    <dialog id="deckDialog">
+      <form method="dialog" class="dialog">
+        <header><h3>Выбери категории</h3></header>
+        <div class="hint">Можно выбрать сразу несколько. По умолчанию отмечены все.</div>
+        <div id="deckList" class="deck-list"></div>
+        <div class="mode">
+          <div>Порядок вопросов</div>
+          <div class="opts">
+            <label><input type="radio" name="orderMode" value="shuffle"> Случайно</label>
+            <label><input type="radio" name="orderMode" value="sequential"> По порядку</label>
+          </div>
+        </div>
+        <footer class="dialog-row">
+          <button class="btn ghost" value="cancel">Отмена</button>
+          <button class="btn" id="applyDeckBtn" value="ok">Применить</button>
+        </footer>
+      </form>
+    </dialog>
+  </main>
+
+  <script src="./app.js?v=13.0" defer></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+
+:root{ --bg:#0e1014; --fg:#e8e8e8; --shadow:0 18px 50px rgba(0,0,0,.35); --strokeW:12px; --accent:#64b5f6; --bgov-o:0; }
+*{ box-sizing:border-box } html,body{ height:100% }
+body{
+  margin:0; color:var(--fg);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial;
+  background: radial-gradient(120% 120% at 50% -10%, #0b0c12 0%, #0e1014 55%, #0e1014 100%);
+}
+/* Полноэкранная накладка — появляется после онбординга */
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background-image:url('./img/bg/background_overlay.png');
+  background-repeat:no-repeat; background-size:cover; background-position:center;
+  opacity: var(--bgov-o, 0); transition: opacity 900ms ease;
+}
+
+.shell{ width:100%; max-width:480px; margin:0 auto; display:flex; flex-direction:column; height:100svh; padding:12px; gap:10px; position:relative; z-index:1 }
+.stage{ flex:1; display:grid; place-items:center; touch-action:manipulation }
+.card{
+  width:min(90vw, 420px); min-height:68vh;
+  background:var(--fill, #DDF5D6); color:var(--text, #39434C);
+  border: var(--strokeW) solid var(--stroke, #3E83A4); border-radius:28px;
+  position:relative; padding:24px; box-shadow: var(--shadow); overflow: hidden;
+  transition: background-color 440ms ease, border-color 440ms ease, color 440ms ease, border-width 440ms ease;
+}
+.card-inner{
+  width:100%; height:100%; display:flex; flex-direction:column; gap:14px;
+  align-items:center; justify-content:flex-start; text-align:center; padding:8px 6px;
+  opacity:1; transform:translateY(0);
+  transition: opacity 440ms ease, transform 440ms cubic-bezier(.2,1.2,.2,1);
+}
+.card-inner.fade-out{ opacity:0; transform:translateY(16px) }
+@media (prefers-reduced-motion: reduce){ .card, .card-inner{ transition:none } body::before{ transition:none } }
+
+.qnum{ font-weight:800; font-size:20px; letter-spacing:.02em; margin-bottom:4px; color:inherit }
+.qtext{ font-weight:800; font-size:clamp(22px, 5vw, 30px); line-height:1.22; color:inherit }
+
+.progress{ display:flex; flex-direction:column; gap:6px; padding:0 4px 2px }
+.pbar{ height:6px; background:rgba(255,255,255,.08); border-radius:10px; overflow:hidden; }
+.pbar > span{ display:block; height:100%; width:0%; background:var(--accent); transition: width 440ms ease; }
+.pcap{ font-size:12px; opacity:.8; text-align:center }
+
+.bbar{ display:flex; gap:10px; align-items:center; justify-content:space-between }
+.btn{ appearance:none; border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.06); color:var(--fg); padding:12px 16px; border-radius:14px; font-weight:600; }
+.btn.primary{ background:#64b5f6; color:#08111f; border-color:rgba(0,0,0,.2) }
+.btn.ghost{ background:transparent } .btn:disabled{ opacity:.5 }
+
+/* Онбординг */
+.intro{ position:fixed; inset:0; background:#0b0d12; color:#fff; display:flex; align-items:center; justify-content:center; padding:clamp(16px,4vw,32px); z-index:9999; opacity:1; transition: opacity 420ms ease; }
+.intro.hidden{ display:none; } .intro.fading{ opacity:0; pointer-events:none; }
+.itext{ max-width:520px; text-align:center; font-weight:800; font-size:clamp(20px, 5.2vw, 28px); line-height:1.5; opacity:0; transform:translateY(6px); transition: opacity 420ms ease, transform 420ms ease; display:none }
+.itext.show{ display:block; opacity:1; transform:translateY(0) } .itext.hiding{ opacity:0; transform:translateY(6px) }
+.rules-card{ width:min(92vw, 520px); background:#11141b; color:#fff; border:2px solid #2a2f3a; border-radius:20px; padding:18px; box-shadow:0 18px 50px rgba(0,0,0,.45); opacity:0; transform:translateY(12px) scale(.98); transition:opacity 420ms ease, transform 420ms ease; display:none }
+.rules-card.show{ display:block; opacity:1; transform:translateY(0) scale(1); }
+.rules-card h4{ margin:0 0 12px; font-size:16px; font-weight:700; opacity:.9; text-align:center }
+.rules{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:12px; }
+.rules li{ display:flex; gap:12px; align-items:flex-start; line-height:1.6; font-size:16px; text-align:left; opacity:0; transform:translateY(6px) }
+.rules li.show{ opacity:1; transform:translateY(0); transition:opacity 360ms ease, transform 360ms ease }
+.rules .e{ width:26px; flex:0 0 26px; text-align:center }
+
+/* Диалог выбора колод */
+dialog{ border:none; padding:0; background:transparent }
+.dialog{ min-width:min(92vw,460px); background:#141821; color:var(--fg); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:14px; }
+.dialog h3{ margin:8px 8px 12px; font-size:16px }
+.deck-list{ display:flex; flex-direction:column; gap:8px; max-height:40vh; overflow:auto; padding:6px; margin-bottom:6px }
+.deck-item{ display:flex; align-items:center; gap:12px; padding:12px 14px; background:#0f131c; border:1px solid rgba(255,255,255,.08); border-radius:12px }
+.swatch{ width:18px; height:18px; border-radius:6px; border:2px solid currentColor; display:inline-block; box-shadow:inset 0 0 0 2px rgba(0,0,0,.15); }
+.deck-name{ font-weight:700 }
+.mode{ display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:6px; padding:10px 12px; background:#0f131c; border:1px solid rgba(255,255,255,.08); border-radius:12px }
+.mode .opts{ display:flex; gap:14px; align-items:center }
+.dialog-row{ display:flex; justify-content:flex-end; gap:10px; margin-top:12px }
+.hint{ font-size:12px; opacity:.7; margin:4px 8px 0 }
+
+/* Появление первой карточки после онбординга */
+body.reveal-start .card{ opacity:0; transform:scale(.96) }
+body.reveal-run   .card{ opacity:1; transform:scale(1); transition: opacity 420ms ease, transform 420ms cubic-bezier(.2,.8,.2,1) }
