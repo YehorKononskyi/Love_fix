@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>Диалог-карточки · Mobile v5</title>
+  <meta name="theme-color" content="#101114">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css"/>
+</head>
+<body>
+  <main id="app" class="shell">
+    <section class="stage" id="stage">
+      <article id="card" class="card" role="button" aria-label="Следующая карточка (тапните)">
+        <div class="card-inner">
+          <div class="qnum" id="qnum">Вопрос</div>
+          <div class="qtext" id="qtext">Тапни, чтобы начать</div>
+        </div>
+      </article>
+    </section>
+
+    <footer class="bbar">
+      <button class="btn ghost" id="prevBtn" aria-label="Предыдущая" disabled>◀</button>
+      <button class="btn" id="deckBtn" aria-label="Колоды">Колода</button>
+      <button class="btn primary" id="nextBtn" aria-label="Следующая">Далее</button>
+    </footer>
+
+    <dialog id="deckDialog">
+      <form method="dialog" class="dialog">
+        <header><h3>Выбери колоду</h3></header>
+        <div id="deckList" class="deck-list"></div>
+        <div class="mode">
+          <div>Порядок вопросов</div>
+          <div class="opts">
+            <label><input type="radio" name="orderMode" value="shuffle"> Случайно</label>
+            <label><input type="radio" name="orderMode" value="sequential"> По порядку</label>
+          </div>
+        </div>
+        <footer class="dialog-row">
+          <button class="btn ghost" value="cancel">Отмена</button>
+          <button class="btn" id="applyDeckBtn" value="ok">Применить</button>
+        </footer>
+      </form>
+    </dialog>
+  </main>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
