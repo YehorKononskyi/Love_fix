@@ -1,5 +1,6 @@
-// v4: order mode toggle (shuffle/sequential) with config default.
+// v5: smooth fade animation + order toggle + remote config
 const $ = (s)=> document.querySelector(s);
+const wait = (ms)=> new Promise(r=>setTimeout(r, ms));
 
 async function fetchConfig(){
   const urlParam = new URL(location.href).searchParams.get("cfg");
@@ -10,7 +11,7 @@ async function fetchConfig(){
 function byCat(cfg){ const m={}; for(const c of cfg.categories) m[c.id]={...c, cards:[]}; for(const x of cfg.cards){ if(m[x.cat]) m[x.cat].cards.push(x); } return m; }
 function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]] } return a }
 
-let CFG=null, CATS=null, CURRENT="all", ORDER=[], IDX=-1, HIST=[], ORDER_MODE="shuffle";
+let CFG=null, CATS=null, CURRENT="all", ORDER=[], IDX=-1, HIST=[], ORDER_MODE="shuffle", BUSY=false;
 
 function buildOrder(){
   const arr = CURRENT==="all" ? CFG.cards : (CATS[CURRENT]?.cards||[]);
@@ -35,17 +36,25 @@ function applyPalette(cat){
   el.style.setProperty("--strokeW", (c.strokeW ? (c.strokeW|0)+"px" : "12px"));
 }
 
-function renderCard(card){
+async function swapTo(card){
+  const inner = $(".card-inner"); if(!inner) return;
+  BUSY = true;
+  inner.classList.add("fade-out");
+  await wait(220);
   const qn=$("#qnum"), qt=$("#qtext");
-  if(!card){ qn.textContent="Вопрос"; qt.textContent="Тапни, чтобы начать"; applyPalette("all"); $("#prevBtn").disabled = HIST.length===0; return; }
-  qn.textContent = `Вопрос ${IDX+1}:`; qt.textContent = card.text; applyPalette(card.cat); $("#prevBtn").disabled = HIST.length===0;
+  if(!card){ qn.textContent="Вопрос"; qt.textContent="Тапни, чтобы начать"; applyPalette("all"); }
+  else { qn.textContent=`Вопрос ${IDX+1}:`; qt.textContent=card.text; applyPalette(card.cat); }
+  $("#prevBtn").disabled = HIST.length===0;
+  inner.classList.remove("fade-out");
+  await wait(10);
+  BUSY = false;
 }
 
-function setCat(id){ CURRENT=id; buildOrder(); HIST.length=0; renderCard(null); }
-function setOrderMode(mode){ ORDER_MODE = (mode==="sequential") ? "sequential" : "shuffle"; buildOrder(); HIST.length=0; renderCard(null); }
+function setCat(id){ if(BUSY) return; CURRENT=id; buildOrder(); HIST.length=0; swapTo(null); }
+function setOrderMode(mode){ if(BUSY) return; ORDER_MODE = (mode==="sequential") ? "sequential" : "shuffle"; buildOrder(); HIST.length=0; swapTo(null); }
 
-function next(){ if(ORDER.length===0) return; if(IDX>=0){ const last=cur(); if(last) HIST.push(last.id); } IDX++; if(IDX>=ORDER.length){ buildOrder(); IDX=0; } renderCard(cur()); }
-function prev(){ if(HIST.length===0) return; const prevId=HIST.pop(); const pos=ORDER.indexOf(prevId); if(pos>=0){ IDX=pos; renderCard(cur()); } }
+async function next(){ if(BUSY||ORDER.length===0) return; if(IDX>=0){ const last=cur(); if(last) HIST.push(last.id); } IDX++; if(IDX>=ORDER.length){ buildOrder(); IDX=0; } await swapTo(cur()); }
+async function prev(){ if(BUSY||HIST.length===0) return; const prevId=HIST.pop(); const pos=ORDER.indexOf(prevId); if(pos>=0){ IDX=pos; await swapTo(cur()); } }
 
 function openDeckDialog(){
   const list=$("#deckList"); list.innerHTML="";
@@ -54,7 +63,6 @@ function openDeckDialog(){
     <span class="deck-name">${cat.name}</span></label>`;
   list.insertAdjacentHTML("beforeend", `<label class="deck-item"><input type="radio" name="deck" value="all"><span class="swatch" style="color:#93c5fd; background:#101114"></span><span class="deck-name">Все</span></label>`);
   for(const cat of Object.values(CATS)){ list.insertAdjacentHTML("beforeend", mk(cat)); }
-  // set radios
   const radios = list.querySelectorAll('input[type="radio"][name="deck"]');
   radios.forEach(r=>{ if(r.value===CURRENT) r.checked=true; });
   document.querySelectorAll('input[name="orderMode"]').forEach(r=> r.checked = (r.value===ORDER_MODE));
@@ -85,7 +93,7 @@ function bind(){
 }
 
 const DEFAULT_CONFIG = {
-  version: 4,
+  version: 5,
   defaultOrder: "shuffle",
   categories: [
     {id:"trust", name:"Доверие", fill:"#DDF5D6", stroke:"#3E83A4", text:"#39434C", strokeW:12},
@@ -106,6 +114,6 @@ const DEFAULT_CONFIG = {
   const def = (cfg.defaultOrder === "sequential") ? "sequential" : "shuffle";
   setOrderMode(def);
   setCat("all");
-  renderCard(null);
+  swapTo(null);
   bind();
 })();
